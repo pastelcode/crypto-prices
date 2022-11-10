@@ -27,9 +27,10 @@ fn main() {
     }
     let coin_data = coin_result.unwrap();
     println!(
-        "1 {coin} = {usd} USD",
-        coin = coin_data.symbol.to_uppercase(),
-        usd = coin_data.market_data.current_price.usd
+        "1 {} = {} USD = {} MXN",
+        coin_data.symbol.to_uppercase(),
+        coin_data.market_data.current_price.usd,
+        coin_data.market_data.current_price.mxn
     );
 }
 
