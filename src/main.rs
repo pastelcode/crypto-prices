@@ -5,7 +5,7 @@ use std::io::Write;
 use models::coin_data::CoinData;
 
 fn main() {
-    print!("Enter the name of the coin: ");
+    print!("Enter the name of the coin (example: ethereum): ");
     std::io::stdout().flush().unwrap();
     let mut coin = String::new();
     if let Err(error) = std::io::stdin().read_line(&mut coin) {
@@ -13,6 +13,7 @@ fn main() {
         return;
     }
 
+    println!("Loading coin data...");
     let coin_result = get_coin_data(&coin.trim().to_lowercase());
     if let Err(ureq::Error::Status(404, _)) = coin_result {
         eprintln!("[ERROR]: The coin '{}' was not found", coin);
@@ -24,6 +25,12 @@ fn main() {
         );
         return;
     }
+    let coin_data = coin_result.unwrap();
+    println!(
+        "1 {coin} = {usd} USD",
+        coin = coin_data.symbol.to_uppercase(),
+        usd = coin_data.market_data.current_price.usd
+    );
 }
 
 fn get_coin_data(coin: &str) -> Result<CoinData, ureq::Error> {
